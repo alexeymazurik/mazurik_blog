@@ -1,0 +1,11 @@
+.env
+/.bundle
+/log/*
+!/log/.keep
+/tmp
+.idea
+*.swp
+.DS_Store
+.byebug_history
+*.copy
+*.log
