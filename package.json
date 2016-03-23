@@ -1,0 +1,26 @@
+{
+  "name": "mazurik_blog",
+  "version": "1.0.0",
+  "description": "--- Documentation is in development :) Enjoy ...",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexeymazurik/mazurik_blog.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexeymazurik/mazurik_blog/issues"
+  },
+  "homepage": "https://github.com/alexeymazurik/mazurik_blog#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0"
+  }
+}
