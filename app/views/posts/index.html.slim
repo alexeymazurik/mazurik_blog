@@ -1,0 +1,31 @@
+- if notice
+  p.alert.alert-warning
+    = notice
+
+h1
+  | Posts &nbsp;
+  = link_to 'New Post', new_post_path, class: 'btn btn-sm btn-default'
+- unless @posts.empty?
+  table.table
+    thead
+      tr
+        th
+          | Title
+        th
+          | Text
+        th
+    tbody
+      - @posts.each do |post|
+        tr
+          td
+            = link_to post.title, post
+          td
+            = post.text
+          td
+            .text-right
+              = link_to 'Edit', edit_post_path(post), class: 'btn btn-sm  btn-warning'
+              | &nbsp;
+              = link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'
+- else
+  p
+    |  No posts yet. 

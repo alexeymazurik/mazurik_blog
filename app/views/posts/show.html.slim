@@ -1,0 +1,12 @@
+h1
+  = @post.title
+  | &nbsp;
+  = link_to 'Edit', edit_post_path(@post), class: 'btn btn-sm btn-default'
+
+p
+  strong
+    | Created at: &nbsp;
+  = str_date @post.created_at
+
+p
+  = @post.text
