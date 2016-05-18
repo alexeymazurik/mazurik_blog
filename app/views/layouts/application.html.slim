@@ -11,10 +11,32 @@ html
       .container
         .navbar-header
           a.navbar-brand[href="/"]
-            |  Mazurik Blog 
+            |  Mazurik Blog
+        ul.nav.navbar-nav.navbar-left
+          li class=('active' if current_page?(controller: 'posts'))
+            = link_to 'Posts', posts_path
+          li class=('active' if current_page?(controller: 'tags'))
+            = link_to 'Tags', tags_path
+          li class=('active' if current_page?(controller: 'sections'))
+            = link_to 'Sections', sections_path
+        ul.nav.navbar-nav.navbar-right
+          - unless current_user
+            li
+              = link_to 'Sign up', new_user_registration_path
+            li
+              = link_to 'Sign in', new_user_session_path
+          - else
+            li.dropdown
+              a.dropdown-toggle[href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"]
+                = current_user.email
+                span.caret
+              ul.dropdown-menu
+                li
+                  = link_to 'Sign Out', destroy_user_session_path, method: :delete
     .container
-      ol.breadcrumb
-        = render_breadcrumbs separator: '',tag: :li
+      - if current_user
+        ol.breadcrumb
+          = render_breadcrumbs separator: '',tag: :li
       = yield
       footer
         .text-center

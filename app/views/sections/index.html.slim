@@ -1,0 +1,31 @@
+table.table.table-hover
+  thead
+    tr
+      th #
+      th Name
+      th Options
+  tbody
+    tr.info
+      td
+      td
+        = simple_form_for @section, method: :post, html: { class: 'form-inline' } do |f|
+          .form-group
+            = f.input :name, required: true, placeholder: 'Section name...', label: false
+          = f.button :submit, 'Add Section', class: 'btn-sm'
+      td
+    - @sections.each do |section|
+      tr
+        td #{section.id}
+        td class='hidden js-edit-form' data-id="#{section.id}"
+          = simple_form_for section, method: :put, html: { class: 'form-inline' } do |f|
+            .form-group
+              = f.input :name, placeholder: 'Section name...', required: true, label: false
+            = f.button :submit, 'Update', class: 'btn btn-sm btn-primary'
+            .form-group
+              button class='btn btn-default js-cancel btn-sm' data-id="#{section.id}" Cancel
+        td class='js-info-name' data-id="#{section.id}" #{section.name}
+        td.text-left
+          button class='js-edit btn btn-sm btn-warning' data-id="#{section.id}"
+            | Edit
+          | &nbsp;
+          = link_to 'Destroy', section, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'

@@ -9,10 +9,9 @@ h1
   table.table
     thead
       tr
-        th
-          | Title
-        th
-          | Text
+        th Title
+        th Annotation
+        th Section
         th
     tbody
       - @posts.each do |post|
@@ -20,12 +19,15 @@ h1
           td
             = link_to post.title, post
           td
-            = post.text
+            = post.annotation
+          td
+            = post.section.name
           td
             .text-right
-              = link_to 'Edit', edit_post_path(post), class: 'btn btn-sm  btn-warning'
-              | &nbsp;
-              = link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'
+              - if (current_user.id == post.user_id)
+                = link_to 'Edit', edit_post_path(post), class: 'btn btn-sm  btn-warning'
+                | &nbsp;
+                = link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'
 - else
   p
     |  No posts yet. 
