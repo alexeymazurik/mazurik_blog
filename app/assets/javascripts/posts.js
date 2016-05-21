@@ -5,7 +5,7 @@ $(function(){
     allowClear: true
   });
 
-  $('#like-form, #unlike-form')
+  $('.like-form')
     .on('ajax:success', function(){
       location.reload();
     })

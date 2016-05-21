@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :rememberable, :trackable, :validatable
 
+  recommends :posts
+
   has_many :posts, dependent: :destroy
   has_many :likes
 end

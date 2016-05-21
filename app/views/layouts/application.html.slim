@@ -12,13 +12,11 @@ html
         .navbar-header
           a.navbar-brand[href="/"]
             |  Mazurik Blog
+        - if current_user
         ul.nav.navbar-nav.navbar-left
-          li class=('active' if current_page?(controller: 'posts'))
-            = link_to 'Posts', posts_path
-          li class=('active' if current_page?(controller: 'tags'))
-            = link_to 'Tags', tags_path
-          li class=('active' if current_page?(controller: 'sections'))
-            = link_to 'Sections', sections_path
+          = active_link_to 'Posts', posts_path, 'posts'
+          = active_link_to 'Tags', tags_path, 'tags'
+          = active_link_to 'Sections', sections_path, 'sections'
         ul.nav.navbar-nav.navbar-right
           - unless current_user
             li

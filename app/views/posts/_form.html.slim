@@ -5,7 +5,7 @@
     = current_user.email
   = f.input :title, placeholder: 'Title...', hint: false
   = f.input :annotation, placeholder: 'Annotation...'
-  = f.input :section_id, collection: @sections, label_method: :name, value_method: :id, selected: @post.section_id
+  = f.input :section_id, collection: @sections, selected: @post.section_id
   .form-group
     label.control-label for='post[tag_list][]'
       | Tags:

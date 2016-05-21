@@ -2,11 +2,14 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.2.6'
 gem 'pg', '~> 0.18.4'
+gem 'sidekiq'
+gem 'redis'
 
 # Layout
 gem 'slim-rails'
 gem 'sass-rails'
-gem 'bootstrap-sass'
+# gem 'bootstrap-sass'
+gem 'materialize-sass'
 gem 'autoprefixer-rails'
 gem 'breadcrumbs_on_rails'
 

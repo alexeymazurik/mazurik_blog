@@ -1,8 +1,11 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :edit, :update, :destroy, :like, :unlike]
-  before_action :fetch_sections, only: [:show, :edit, :index, :update, :new, :create]
-  before_action :post_owner, only: [:edit, :update, :destroy]
+  RECOMMENDABLE_METHODS = %w(like unlike dislike undislike)
+
+  before_action :set_post, only: %w(show edit update destroy).concat(RECOMMENDABLE_METHODS)
+  before_action :fetch_sections, only: %w(show edit index update new create)
+  before_action :post_owner, only: %w(edit update destroy)
   add_breadcrumb 'Posts', :posts_path, only: %w(show edit index new)
+  respond_to :json, only: RECOMMENDABLE_METHODS
 
   # GET /posts
   def index
@@ -13,24 +16,6 @@ class PostsController < ApplicationController
   def show
     add_breadcrumb @post.id, post_path
     @post.user = User.find(@post.user_id)
-  end
-
-  def like
-    @post.like(current_user)
-    if @post.save
-      head :ok, content_type: 'text/html'
-    else
-      head :error, content_type: 'text/html'
-    end
-  end
-
-  def unlike
-    @post.unlike(current_user)
-    if @post.save
-      head :ok, content_type: 'text/html'
-    else
-      head :error, content_type: 'text/html'
-    end
   end
 
   # GET /posts/new
@@ -74,6 +59,18 @@ class PostsController < ApplicationController
   def destroy
     @post.destroy
     redirect_to posts_url, notice: 'Post was successfully destroyed.'
+  end
+
+  RECOMMENDABLE_METHODS.each do |method|
+    define_method(method) do
+      @post = Post.find(params[:id])
+
+      if current_user.send(method, @post)
+        head :ok
+      else
+        head :unprocessable_entity
+      end
+    end
   end
 
   private

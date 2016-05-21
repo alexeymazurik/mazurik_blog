@@ -25,21 +25,35 @@ h4
 p
   = @post.text.html_safe
 
-- unless @post.already_liked?(current_user)
-  = form_for @post, as: :post, remote: true, url: like_post_path, method: :post, html: { id: 'like-form' } do |f|
-    button class='btn btn-default' type='submit'
-      span.glyphicon.glyphicon-heart-empty
-      | &nbsp;Like
-    span
-      | &nbsp;
-      = @post.likes_count
-      | &nbsp;people liked it
-- else
-  = form_for @post, as: :post, remote: true, url: unlike_post_path, method: :post, html: { id: 'unlike-form' } do |f|
-    button class='btn btn-primary' type='submit'
-      span.glyphicon.glyphicon-heart
-      | &nbsp;Like
-    span
-      | &nbsp;
-      = @post.likes_count
-      | &nbsp;people liked it
+.like-form-section
+  - unless current_user.likes?(@post)
+    = form_for @post, url: like_post_path, remote: true, method: :post, html: { class: 'form-inline like-form' } do |f|
+      = f.button class: 'btn btn-default' do
+        span.glyphicon.glyphicon-thumbs-up
+        | &nbsp;Like
+    | &nbsp;
+  - else
+    = form_for @post, url: unlike_post_path, remote: true, method: :delete, html: {class: 'form-inline like-form'} do |f|
+      button.btn.btn-success type='submit'
+        span.glyphicon.glyphicon-thumbs-up
+        | &nbsp;Like
+    | &nbsp;
+  - unless current_user.dislikes?(@post)
+    = form_for @post, url: dislike_post_path, remote: true, method: :post, html: {class: 'form-inline like-form'} do |f|
+      button.btn.btn-default type='submit'
+        span.glyphicon.glyphicon-thumbs-down
+        | &nbsp;Dislike
+    | &nbsp;
+  - else
+    = form_for @post, url: undislike_post_path, remote: true, method: :delete, html: {class: 'form-inline like-form'} do |f|
+      button.btn.btn-danger type='submit'
+        span.glyphicon.glyphicon-thumbs-down
+        | &nbsp;Dislike
+
+  - if current_user.recommended_posts.size > 0
+    h3 You may also like:
+    ul.row
+      - current_user.recommended_posts.each do |post|
+        li.col-md-3
+          = post.title
+          img src="#{post.image_src}" alt='Post image'

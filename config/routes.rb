@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
-  root to: redirect('posts')
+  root to: 'posts#index'
 
   resources :posts do
     member do
-      post 'like'
-      post 'unlike'
+      post   :like
+      delete :like,     action: :unlike,     as: :unlike
+      post   :dislike
+      delete :dislike,  action: :undislike,  as: :undislike
     end
   end
 
