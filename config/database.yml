@@ -16,4 +16,4 @@ test:
 production:
   <<: *default
   database: mazurik_blog_production
-  password: <%= ENV['DATABASE_PASSWORD'] %>
+  password: password
