@@ -1,0 +1,66 @@
+footer {
+  margin: 20px 0;
+}
+
+.like-form-section > form.form-inline {
+   display: inline-block;
+ }
+
+.also-like {
+  margin-top: 40px;
+}
+
+.min-200 {
+  min-width: 200px;
+}
+
+.min-100 {
+  min-width: 100px;
+}
+
+.min-130 {
+  min-width: 200px;
+}
+
+.navbar {
+  margin-bottom: 10px;
+}
+
+.sections {
+  .title {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    color: white;
+  }
+  .main-section {
+    position: relative;
+    img {
+      width: 100%;
+      border-radius: 10px;
+    }
+  }
+  .sub-sections {
+    margin: 10px 0;
+    .section {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      &:nth-child(1) {
+        padding-right: 10px;
+      }
+      &:nth-child(2) {
+        padding: 0 5px;
+      }
+      &:nth-child(3) {
+        padding-left: 10px;
+      }
+
+
+      img {
+        border-radius: 10px;
+        width: 100%;
+      }
+    }
+  }
+}

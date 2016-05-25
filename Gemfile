@@ -2,13 +2,14 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.2.6'
 gem 'pg', '~> 0.18.4'
+gem 'sidekiq'
+gem 'redis'
 
 # Layout
 gem 'slim-rails'
 gem 'sass-rails'
-gem 'bootstrap-sass', '~> 3.2.0'
+gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
-gem 'breadcrumbs_on_rails'
 
 # Scripts
 gem 'jquery-rails'
@@ -21,9 +22,17 @@ gem 'puma', '~>3.1.0'
 gem 'web-console'
 gem 'simple_form'
 gem 'devise'
+gem 'nokogiri'
+gem 'select2-rails'
+gem 'acts-as-taggable-on', '~> 3.4'
+gem 'ransack'
+
+# Recommender system
+gem 'recommendable'
 
 group :development, :test do
   gem 'byebug'
+  gem 'rubocop'
 end
 
 group :test do

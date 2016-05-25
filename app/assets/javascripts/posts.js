@@ -1,2 +1,16 @@
-// Place all the behaviors and hooks related to the matching controller here.
-// All this logic will automatically be available in application.js.
+$(function(){
+  $('.js-select2-select').select2({
+    theme: "bootstrap",
+    tags: true,
+    allowClear: true
+  });
+
+  $('.like-form')
+    .on('ajax:success', function(){
+      location.reload();
+    })
+    .on('ajax:error', function(){
+      console.error('Error');
+    });
+});
+

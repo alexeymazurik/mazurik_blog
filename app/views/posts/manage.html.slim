@@ -1,0 +1,29 @@
+h1
+  | Posts &nbsp;
+  = link_to 'New Post', new_post_path, class: 'btn btn-sm btn-default'
+- unless @posts.empty?
+  table.table
+    thead
+      tr
+        th Title
+        th Annotation
+        th Section
+        th
+    tbody
+      - @posts.each do |post|
+        tr
+          td.min-200
+            = link_to post.title, post
+          td
+            = post.annotation
+          td.min-100
+            = post.section.name
+          td.min-130
+            .text-left
+              - if (current_user.id == post.user_id || current_user.admin?)
+                = link_to 'Edit', edit_post_path(post), class: 'btn btn-sm  btn-warning'
+                | &nbsp;
+                = link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'
+- else
+  p
+    |  No posts yet.

@@ -1,4 +1,21 @@
 = simple_form_for(@post) do |f|
-  = f.input :title, placeholder: 'Title'
-  = f.input :text, placeholder: 'Text'
+  .form-group
+    label.control-label
+      | Author: &nbsp;
+    = current_user.email
+  = f.input :title, placeholder: 'Title...', hint: false
+  = f.input :annotation, placeholder: 'Annotation...'
+  = f.input :section_id, collection: @sections, selected: @post.section_id
+  = f.input :user_id, as: :hidden, input_html: { value: current_user.id }
+  .form-group
+    label.control-label for='post[tag_list][]'
+      | Tags:
+    select.form-control.js-select2-select multiple="multiple" name="post[tag_list][]"
+      - ActsAsTaggableOn::Tag.all.pluck(:name).each do |tag|
+        - if tag.in?(@post.tag_list)
+          option value="#{tag}" selected='selected' #{tag}
+        - else
+          option value="#{tag}" #{tag}
+  = f.input :image_src, placeholder: 'Image URL...'
+  = f.input :text, placeholder: 'Blog text type here...', input_html: {rows: '30'}
   = f.button :submit

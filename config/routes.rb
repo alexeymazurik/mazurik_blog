@@ -1,5 +1,19 @@
 Rails.application.routes.draw do
+  root to: 'posts#index'
+
+  get 'manage', to: 'posts#manage'
+
+  resources :posts do
+    member do
+      post   :like
+      delete :like, action: :unlike, as: :unlike
+      post   :dislike
+      delete :dislike, action: :undislike, as: :undislike
+    end
+  end
+
+  resources :sections, only: %w(index create update destroy)
+  resources :tags, only: %w(index)
+
   devise_for :users
-  root 'posts#index'
-  resources :posts
 end

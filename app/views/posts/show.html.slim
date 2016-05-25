@@ -1,12 +1,72 @@
-h1
+h2
+  = @post.section.name
+  | &nbsp
+  | &#8594;
+  | &nbsp
   = @post.title
   | &nbsp;
-  = link_to 'Edit', edit_post_path(@post), class: 'btn btn-sm btn-default'
+  - if (current_user.id == @post.user_id)
+    = link_to 'Edit', edit_post_path(@post), class: 'btn btn-sm btn-default'
+
+- if @post.image_src.present?
+  = image_tag @post.image_src, alt: 'Post image', width: '100%'
+
+p
+  | By&nbsp;
+  strong
+    = @post.author
 
 p
   strong
     | Created at: &nbsp;
   = str_date @post.created_at
 
+h4
+  - @post.tags.each do |tag|
+    span.label.label-default
+      = tag.name
+
 p
-  = @post.text
+  = @post.text.html_safe
+
+.like-form-section
+  - unless current_user.likes?(@post)
+    = form_for @post, url: like_post_path, remote: true, method: :post, html: { class: 'form-inline like-form' } do |f|
+      = f.button class: 'btn btn-default' do
+        span.glyphicon.glyphicon-thumbs-up
+        | &nbsp;Like
+    | &nbsp;
+  - else
+    = form_for @post, url: unlike_post_path, remote: true, method: :delete, html: {class: 'form-inline like-form'} do |f|
+      button.btn.btn-success type='submit'
+        span.glyphicon.glyphicon-thumbs-up
+        | &nbsp;Like
+    | &nbsp;
+  - unless current_user.dislikes?(@post)
+    = form_for @post, url: dislike_post_path, remote: true, method: :post, html: {class: 'form-inline like-form'} do |f|
+      button.btn.btn-default type='submit'
+        span.glyphicon.glyphicon-thumbs-down
+        | &nbsp;Dislike
+    | &nbsp;
+  - else
+    = form_for @post, url: undislike_post_path, remote: true, method: :delete, html: {class: 'form-inline like-form'} do |f|
+      button.btn.btn-danger type='submit'
+        span.glyphicon.glyphicon-thumbs-down
+        | &nbsp;Dislike
+
+
+  - if current_user.recommended_posts.size > 0 && !(current_user.recommended_posts.include?(@post) && current_user.recommended_posts.size == 1)
+    .also-like
+      .panel.panel-default
+        .panel-body
+          h3 You may also like:
+          - current_user.recommended_posts.each do |post|
+            - if @post != post
+              .media
+                .media-left
+                  = link_to post do
+                    img.media-object width="100" src="#{post.image_src}" alt='Post image'
+                .media-body
+                  = link_to post do
+                    h4.media-heading #{post.title}
+                  p #{post.annotation}

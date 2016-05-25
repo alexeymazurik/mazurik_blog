@@ -1,0 +1,15 @@
+table.table
+  thead
+    tr
+      th
+        | #
+      th
+        | Name
+  tbody
+    - @tags.each do |tag|
+      tr
+        td
+          = tag.id
+        td
+          = tag.name
+
