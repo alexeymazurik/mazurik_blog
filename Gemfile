@@ -11,6 +11,8 @@ gem 'sass-rails'
 gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
 
+gem 'therubyracer'
+
 # Scripts
 gem 'jquery-rails'
 gem 'turbolinks'
