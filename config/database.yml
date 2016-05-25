@@ -15,5 +15,5 @@ test:
 
 production:
   <<: *default
-  database: mazurik_blog_production
+  database: postgres
   password: password
