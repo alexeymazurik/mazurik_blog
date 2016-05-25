@@ -9,7 +9,7 @@ gem 'redis'
 gem 'slim-rails'
 gem 'sass-rails'
 gem 'bootstrap-sass'
-# gem 'autoprefixer-rails'
+gem 'autoprefixer-rails'
 
 # Scripts
 gem 'jquery-rails'
