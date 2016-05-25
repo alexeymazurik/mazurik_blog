@@ -1,4 +1,8 @@
-h1
+h2
+  = @post.section.name
+  | &nbsp
+  | &#8594;
+  | &nbsp
   = @post.title
   | &nbsp;
   - if (current_user.id == @post.user_id)
@@ -10,7 +14,7 @@ h1
 p
   | By&nbsp;
   strong
-    = @post.user.email
+    = @post.author
 
 p
   strong
@@ -50,10 +54,19 @@ p
         span.glyphicon.glyphicon-thumbs-down
         | &nbsp;Dislike
 
-  - if current_user.recommended_posts.size > 0
-    h3 You may also like:
-    ul.row
-      - current_user.recommended_posts.each do |post|
-        li.col-md-3
-          = post.title
-          img src="#{post.image_src}" alt='Post image'
+
+  - if current_user.recommended_posts.size > 0 && !(current_user.recommended_posts.include?(@post) && current_user.recommended_posts.size == 1)
+    .also-like
+      .panel.panel-default
+        .panel-body
+          h3 You may also like:
+          - current_user.recommended_posts.each do |post|
+            - if @post != post
+              .media
+                .media-left
+                  = link_to post do
+                    img.media-object width="100" src="#{post.image_src}" alt='Post image'
+                .media-body
+                  = link_to post do
+                    h4.media-heading #{post.title}
+                  p #{post.annotation}

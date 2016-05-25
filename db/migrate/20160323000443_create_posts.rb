@@ -4,6 +4,7 @@ class CreatePosts < ActiveRecord::Migration
       t.string :title
       t.text :text
       t.string :image_src
+      t.string :author
       t.text :annotation
       t.references :user, index: true
 

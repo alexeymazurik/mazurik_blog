@@ -6,6 +6,7 @@
   = f.input :title, placeholder: 'Title...', hint: false
   = f.input :annotation, placeholder: 'Annotation...'
   = f.input :section_id, collection: @sections, selected: @post.section_id
+  = f.input :user_id, as: :hidden, input_html: { value: current_user.id }
   .form-group
     label.control-label for='post[tag_list][]'
       | Tags:

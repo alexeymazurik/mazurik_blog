@@ -1,6 +1,5 @@
 class SectionsController < ApplicationController
   before_action :set_section, only: %w(update destroy)
-  add_breadcrumb 'Sections', :sections_path, only: %w(index)
 
   def index
     @section = Section.new
@@ -31,11 +30,12 @@ class SectionsController < ApplicationController
   end
 
   private
-    def set_section
-      @section = Section.find(params[:id])
-    end
 
-    def section_params
-      params.require(:section).permit(:name)
-    end
+  def set_section
+    @section = Section.find(params[:id])
+  end
+
+  def section_params
+    params.require(:section).permit(:name)
+  end
 end

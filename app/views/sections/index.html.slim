@@ -1,18 +1,32 @@
+.sections
+  .main-section
+    h3.title
+      | Technical sciences
+    = image_tag 'computer_sciences.png'
+  .sub-sections.row
+    .section.col-md-4
+      = image_tag 'social_media.jpg'
+    .section.col-md-4
+      = image_tag 'economics.jpg'
+    .section.col-md-4
+      = image_tag 'legal_sciences.jpg'
+
 table.table.table-hover
   thead
     tr
       th #
       th Name
-      th Options
+      - if current_user.admin?
+        th Options
   tbody
-    tr.info
-      td
-      td
-        = simple_form_for @section, method: :post, html: { class: 'form-inline' } do |f|
-          .form-group
-            = f.input :name, required: true, placeholder: 'Section name...', label: false
-          = f.button :submit, 'Add Section', class: 'btn-sm'
-      td
+    - if current_user.admin?
+      tr.info
+        td
+        td
+          = simple_form_for @section, method: :post, html: { class: 'form-inline' } do |f|
+            .form-group
+              = f.input :name, required: true, placeholder: 'Section name...', label: false
+            = f.button :submit, 'Add Section', class: 'btn-sm'
     - @sections.each do |section|
       tr
         td #{section.id}
@@ -24,8 +38,9 @@ table.table.table-hover
             .form-group
               button class='btn btn-default js-cancel btn-sm' data-id="#{section.id}" Cancel
         td class='js-info-name' data-id="#{section.id}" #{section.name}
-        td.text-left
-          button class='js-edit btn btn-sm btn-warning' data-id="#{section.id}"
-            | Edit
-          | &nbsp;
-          = link_to 'Destroy', section, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'
+        - if current_user.admin?
+          td.text-left
+            button class='js-edit btn btn-sm btn-warning' data-id="#{section.id}"
+              | Edit
+            | &nbsp;
+            = link_to 'Destroy', section, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'

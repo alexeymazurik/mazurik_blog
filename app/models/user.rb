@@ -7,5 +7,4 @@ class User < ActiveRecord::Base
   recommends :posts
 
   has_many :posts, dependent: :destroy
-  has_many :likes
 end

@@ -8,10 +8,8 @@ gem 'redis'
 # Layout
 gem 'slim-rails'
 gem 'sass-rails'
-# gem 'bootstrap-sass'
-gem 'materialize-sass'
+gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
-gem 'breadcrumbs_on_rails'
 
 # Scripts
 gem 'jquery-rails'
@@ -27,12 +25,14 @@ gem 'devise'
 gem 'nokogiri'
 gem 'select2-rails'
 gem 'acts-as-taggable-on', '~> 3.4'
+gem 'ransack'
 
 # Recommender system
 gem 'recommendable'
 
 group :development, :test do
   gem 'byebug'
+  gem 'rubocop'
 end
 
 group :test do

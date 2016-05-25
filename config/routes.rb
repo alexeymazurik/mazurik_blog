@@ -1,12 +1,14 @@
 Rails.application.routes.draw do
   root to: 'posts#index'
 
+  get 'manage', to: 'posts#manage'
+
   resources :posts do
     member do
       post   :like
-      delete :like,     action: :unlike,     as: :unlike
+      delete :like, action: :unlike, as: :unlike
       post   :dislike
-      delete :dislike,  action: :undislike,  as: :undislike
+      delete :dislike, action: :undislike, as: :undislike
     end
   end
 

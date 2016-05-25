@@ -1,0 +1,510 @@
+Title: Improvement of recommendation systems with svd algorithm
+Author: Mazurik O.
+Summary: Basic problems of recommendation systems, basic types of it and difference between them were investigated. Also there is description of modern algorithm SVD and results of its work.
+Key Words: recommendation systems, forecasting, computer science.
+Section: Technical sciences
+-------------------------------------------
+<p style="text-align: justify;">Рекомендаційні системи з’явилися на сучасному ринку ІТ як механізм для заміни статичному списку рекомендацій при пошуку або покупках на веб-сайтах. Ці системи формують рейтинговий перелік об’єктів (товарів, фільмів, музичних композицій) на основі різних критеріїв: релевантність, популярність, історія оцінок тощо.</p>
+
+<p style="text-align: justify;">При розробці рекомендаційних систем зазвичай розробники стикаються з рядом проблем прогнозування:</p>
+
+<ul>
+	<li style="text-align: justify;">
+<em>Розрідженість даних</em> (більшість користувачів не ставить оцінки товарам, отже дані з попередніми оцінками являють собою розріджену матрицю).</li>
+	<li style="text-align: justify;">
+<em>Холодний старт</em> (робота з новими користувачами або товарами).</li>
+	<li style="text-align: justify;">
+<em>Синонімія</em> (проблема розпізнавання схожих товарів з різними назвами). [2]</li>
+	<li style="text-align: justify;">
+<em>Шахрайство</em> (цілеспрямоване завищення рейтингів певних товарів їх власниками).</li>
+	<li style="text-align: justify;">
+<em>Розмаїття</em> (при великій вибірці нові або маловідомі товари мають низькі позиції в рейтинговому списку).</li>
+	<li style="text-align: justify;">
+<em>Білі ворони</em> (унікальні користувачі, смаки яких дуже важко обробити, оскільки вони не співпадають зі смаками відокремлених типів). [3]</li>
+</ul>
+
+<p style="text-align: center;"><strong>Базові підходи розробки рекомендаційних систем</strong></p>
+
+<p style="text-align: justify;"><em>Колаборативна фільтрація</em></p>
+
+<p style="text-align: justify;">Це один з методів прогнозу в рекомендаційних системах, який використовує відомі переваги (оцінки) групи користувачів для прогнозування невідомих переваг (оцінок) іншого користувача. За допомогою цього алгоритму будується певна таблиця користувачів, які групуються за схожістю, та прогнозуються результати для інших користувачів.</p>
+
+<p style="text-align: justify;">Наприклад, маємо декількох користувачів порталу з музикою. Всіх користувачів можна поділити на групи за їх смаками (одним подобається джаз, іншим - рок). За цією інформацію в середині кожної групи можна виділити найпопулярніші хіти, які користувачі слухають більше всього. Отже, кожному учаснику певної групи будуть рекомендовані популярні композиції, які ним не були ще прослухані. [5]</p>
+
+<p style="text-align: justify;"><strong>Переваги</strong>: швидка робота алгоритмів (K-based та ін.) - мала кількість ітерацій; прості в реалізації.</p>
+
+<p style="text-align: justify;"><strong>Недоліки</strong>: холодний старт; нема що рекомендувати новим або нетиповим користувачам; розріджені матриці оцінок (іноді неможливо зробити прогноз); шахрайство.</p>
+
+<p style="text-align: justify;"><em>Фільтрація вмісту (контенту)</em></p>
+
+<p style="text-align: justify;">Цей тип алгоритмів прогнозування базується на моделі об’єкту, оцінки якого будуть прогнозуватися. Для кожного об’єкту буде побудовано математичну модель з використанням конкретних характеристик товару (параметри моделі). Рекомендації будуть базуватися на порівнянні характеристик поточного товару та власне характеристик користувача (інформація, яка міститься в профілі користувача).</p>
+
+<p style="text-align: justify;">Для прикладу візьмемо сайт з онлайн-кінотеатром. Нехай маємо користувача, який передивлявся наступні фільми: “Міцний горішок” (бойовик), “Скайфолл” (бойовик, триллер). Висувається гіпотеза, що цьому користувачу подобаються фільми з жанром бойовик, тому логічно будуть створені рекомендації фільмів жанру бойовик. [5]</p>
+
+<p style="text-align: justify;"><strong>Переваги</strong>: більш точний результат; немає проблеми холодного старту, оскільки рекомендації базуються на моделі об’єкта, а не на попередніх оцінках користувачів.</p>
+
+<p style="text-align: justify;"><strong>Недоліки</strong>: “затратне” створення моделі (її побудова досить складна), невисока швидкодія алгоритмів (багато обчислень); втрата точності при скороченні параметрів моделі.</p>
+
+<p style="text-align: justify;"><em>Гібридні системи</em></p>
+
+<p style="text-align: justify;">Даний тип алгоритмів поєднує в собі підходи колаборативної та content-based фільтрації. Цей підхід найбільш популярний при розробці рекомендаційних систем для комерційних сайтів, так як його було створено щоб подолати проблеми колаборативної фільтрації, а також покращити якість прогнозування оцінок конкретної моделі.</p>
+
+<p style="text-align: justify;"><strong>Переваги</strong>: велика швидкодія; кращі результати.</p>
+
+<p style="text-align: justify;"><strong>Недоліки</strong>: дуже дорога розробка рекомендаційної системи, оскільки реалізація цього типу алгоритмів дуже складна; важко підтримувати, оскільки навіть незначні зміни в роботі призводять до змін роботи алгоритму.</p>
+
+<p style="text-align: justify;">В наш час найпопулярнішими алгоритмами для рекомендаційних систем виявилися підходи, засновані на колаборативній фільтрації, та content-based системи. Майже всі вони мають такі недоліки, як холодний старт, тривіальність результатів рекомендацій тощо. Одним з нових алгоритмів, який майже не має звичайних проблем для заснованих на сусідстві підходів, виявився гібридний SVD алгоритм, який було створено саме для покращення результатів звичайних алгоритмів.</p>
+
+<p style="text-align: center;"><strong>Постановка завдання</strong></p>
+
+<p style="text-align: justify;">Маємо множину користувачів , множину об’єктів (фільми, треки, товари тощо) , та множину подій (дії, які користувачі виконують над об’єктами) . Кожна подія задається користувачем u, об’єктом i, своїм результатом , а також, можливо,  ще іншими характеристиками. Наша ціль:</p>
+
+<p style="margin-left: 36pt; text-align: justify;">●      передбачити перевагу:</p>
+
+<p style="margin-left: 36pt; text-align: justify;">●      персональні рекомендації:</p>
+
+<p style="margin-left: 36pt; text-align: justify;">●      схожі об’єкти:</p>
+
+<p style="text-align: center;"><strong>Таблиця 1. Оцінки користувачів</strong></p>
+
+<table align="center" border="1" cellpadding="0" cellspacing="0" width="397">
+	<tbody>
+		<tr>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">Item 1</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">Item 2</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">Item 3</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">Item 4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">Item 5</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">Item 6</p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">User 1</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">5</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">5</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">User 2</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">5</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">User 3</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">3</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">5</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">User 4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">3</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">User 5</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">2</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:57px;height:23px;">
+			<p style="text-align: center;">User 6</p>
+			</td>
+			<td style="width:57px;height:23px;">
+			<p style="text-align: center;">3</p>
+			</td>
+			<td style="width:57px;height:23px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:23px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:23px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:23px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:23px;">
+			<p style="text-align: center;">5</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div style="clear: both; text-align: justify;"> </div>
+
+<p style="text-align: justify;"> </p>
+
+<p style="text-align: center;"><strong>Таблиця 2. Завдання для прогнозування</strong></p>
+
+<table align="center" border="1" cellpadding="0" cellspacing="0" width="397">
+	<tbody>
+		<tr>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">Item 1</p>
+			</td>
+			<td colspan="2" style="width:57px;height:1px;">
+			<p style="text-align: center;">Item 2</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">Item 3</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">Item 4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">Item 5</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">Item 6</p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">User 1</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">5</p>
+			</td>
+			<td colspan="2" style="width:57px;height:1px;">
+			<p style="text-align: center;">4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">5</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">User 2</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">4</p>
+			</td>
+			<td style="width:56px;height:1px;">
+			<p style="text-align: center;">?</p>
+			</td>
+			<td colspan="2" style="width:57px;height:1px;">
+			<p style="text-align: center;">5</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">User 3</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:56px;height:1px;">
+			<p style="text-align: center;">3</p>
+			</td>
+			<td colspan="2" style="width:57px;height:1px;">
+			<p style="text-align: center;">5</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">?</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">User 4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td colspan="2" style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">?</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">3</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">User 5</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">?</p>
+			</td>
+			<td colspan="2" style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">2</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">4</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">?</p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">User 6</p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">3</p>
+			</td>
+			<td colspan="2" style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;"> </p>
+			</td>
+			<td style="width:57px;height:1px;">
+			<p style="text-align: center;">5</p>
+			</td>
+		</tr>
+		<tr height="0">
+			<td style="text-align: center;"> </td>
+			<td style="text-align: center;"> </td>
+			<td style="text-align: center;"> </td>
+			<td style="text-align: center;"> </td>
+			<td style="text-align: center;"> </td>
+			<td style="text-align: center;"> </td>
+			<td style="text-align: center;"> </td>
+			<td style="text-align: justify;"> </td>
+		</tr>
+	</tbody>
+</table>
+
+<div style="clear: both; text-align: justify;"> </div>
+
+<p style="text-align: justify;">Основна ідея колаборативної фільтрації: схожим користувачам зазвичай подаються схожі об’єкти. Найпростіший метод вирішення даної задачі:</p>
+
+<p style="margin-left: 36pt; text-align: justify;">●      Оберемо деяку умовну міру схожості користувачів за їх історією оцінок .</p>
+
+<p style="margin-left: 36pt; text-align: justify;">●      Поділимо користувачів на групи (кластери) таким чином, щоб схожі користувачі знаходилися в одному кластері: .</p>
+
+<p style="margin-left: 36pt; text-align: justify;">●      Оцінку користувача об’єкту будемо передбачувати як середню оцінку кластера для цього об’єкта:</p>
+
+<p style="text-align: justify;"><strong style="line-height: 1.6em;">Проблеми алгоритму</strong><span style="line-height: 1.6em;">:</span></p>
+
+<p style="margin-left: 36pt; text-align: justify;">●      Рекомендація новим користувачам. Для таких користувачів не знайдеться відповідного кластера зі схожими на них користувачами.</p>
+
+<p style="margin-left: 36pt; text-align: justify;">●      Рекомендація для нетипового користувача. Ми ділимо усіх користувачів на якісь класи (шаблони).</p>
+
+<p style="margin-left: 36pt; text-align: justify;">●      Якщо в кластері ніхто не оцінив об’єкт, то зробити передбачення не вийде.</p>
+
+<p style="text-align: justify;">Два підходи, щодо покращення роботи алгоритму:</p>
+
+<p style="text-align: justify;"><strong>User-based</strong></p>
+
+<p style="text-align: justify;">Підхід, в якому ми опираємося на припущення, що вподобання користувача схожі на вподобання схожих користувачів. Замінемо жорстку кластеризацію на формулу:</p>
+
+<p style="text-align: justify;"><span style="line-height: 1.6em;">Проблеми підходу:</span></p>
+
+<p style="margin-left: 36pt; text-align: justify;">●      Нові/нетипові користувачі.</p>
+
+<p style="margin-left: 36pt; text-align: justify;">●      Проблема розмаїття [1]</p>
+
+<p style="text-align: justify;"><strong>Item-based</strong></p>
+
+<p style="text-align: justify;">Підхід, в якому ми вважаємо, що користувачу сподобаються схожі товари з тим, що він вже обрав. Жорстка кластеризація буде замінена наступним чином:</p>
+
+<p style="text-align: justify;"><span style="line-height: 1.6em;">Недоліки:</span></p>
+
+<p style="margin-left: 36pt; text-align: justify;">●      Холодний старт.</p>
+
+<p style="margin-left: 36pt; text-align: justify;">●      Рекомендації часто тривіальні. [1]</p>
+
+<p style="text-align: justify;">Алгоритм SVD</p>
+
+<p style="text-align: justify;">SVD (Singular Value Decomposition) - сингулярне розкладання матриці. Теорема про сингулярний розклад стверджує, що у будь-якої матриці <em>А</em> розміру n на m існує розкладання в добуток трьох матриць: <em>U</em>,  та :</p>
+
+<p style="text-align: justify;"><span style="line-height: 1.6em;">Матриці U i V - ортогональні, а </span><span style="line-height: 1.6em;"> - діагональна (хоч і не квадратна).</span></p>
+
+<p style="text-align: justify;">Лямбди в формулі розташовані за спаданням. Доведення теореми буде опущене.</p>
+
+<p style="text-align: justify;">Окрім звичайного розкладання існує ще усічене, коли ми з усіх лямбд залишаємо лише перші <strong><em>d</em></strong> чисел, а інші вважаємо рівними нулю.</p>
+
+<p style="text-align: justify;"><span style="line-height: 1.6em;">Це рівносильно тому, що в матрицях </span><strong style="line-height: 1.6em;"><em>U</em></strong><span style="line-height: 1.6em;"> i </span><strong style="line-height: 1.6em;"><em>V </em></strong><span style="line-height: 1.6em;">ми залишаємо лише </span><strong style="line-height: 1.6em;">d</strong><span style="line-height: 1.6em;"> стовпців, а матрицю обрізаємо до квадратної розмірністю .</span></p>
+
+<p style="text-align: justify;"><span style="line-height: 1.6em;">Виявляється, що на практиці нова матриця </span><em style="line-height: 1.6em;">А’ </em><span style="line-height: 1.6em;">дуже добре наближає вихідну матрицю </span><strong style="line-height: 1.6em;"><em>А </em></strong><span style="line-height: 1.6em;">та, тим більше, є найкращим наближенням. [4]</span></p>
+
+<p style="text-align: center;"><strong>SVD для рекомендацій</strong></p>
+
+<p style="text-align: justify;">Спростимо трохи отриману формулу, вважаючи добуток перших двох матриць за одну:</p>
+
+<p style="text-align: justify;"><span style="line-height: 1.6em;">Тобто отримано наступний алгоритм: щоб передбачити оцінку користувача </span><em style="line-height: 1.6em;">U </em><span style="line-height: 1.6em;">для фільма </span><em style="line-height: 1.6em;">V</em><span style="line-height: 1.6em;">, ми беремо деякий вектор </span><strong style="line-height: 1.6em;"><em>p </em></strong><span style="line-height: 1.6em;">(набір параметрів користувача) та вектор </span><strong style="line-height: 1.6em;"><em>q </em></strong><span style="line-height: 1.6em;">(набір параметрів фільму). Їх скалярний добуток і буде необхідним передбаченням.</span></p>
+
+<p style="text-align: justify;">Наприклад, у векторі користувача на першому місці буде стояти параметр, який відповідає за стать користувача (хлопчик чи дівчинка), а на другому - його вік. У фільмів на аналогічному першому місці буде стояти параметр, який вказує на те, чи цей фільм подобається більше хлопчикам/дівчатам, а інший - для якої вікової категорії цей фільм більше підходить. Тому ми бачимо, що цей алгоритм дозволяє не тільки передбачувати оцінки. Також ми можемо передбачувати скриті інтереси користувачів та параметри об’єктів.</p>
+
+<p style="text-align: justify;">Але все виявляється не так просто. По-перше, нам не відома повністю матриця оцінок <strong><em>R</em></strong>, а, по-друге, розклад матриці на добуток не єдиний, тому не факт, що на першому місці вектора <strong><em>p</em></strong> буде стояти параметр, що відповідає за стать.</p>
+
+<p style="text-align: justify;">Подолати ці проблеми допоможуть сучасні методи оптимізації та машинне навчання. </p>
+
+<p style="text-align: justify;">Ми не знаємо матрицю оцінок, тому однозначний SVD розклад знайти неможливо. Але створити рекомендаційну систему, яка буде працювати схожим чином - можна. Отже, ми маємо знайти  деякий вектор користувача та вектор фільму з різними параметрами. Оскільки ми маємо попередні оцінки користувачів їх можна використати як навчальну вибірку. А для знаходження результатів, близьких до існуючих, ми маємо обрати оптимальні параметри моделей фільмів та користувачів. Для покращення машинного навчання результатів часто використовують регуляризатори.</p>
+
+<p style="text-align: justify;">Пошук оптимальних параметрів можна прискорити використавши вже відомі алгоритми градієнтного спуску та метод найменших квадратів. [4]</p>
+
+<p style="text-align: center;"><strong>Додаткові властивості рекомендацій</strong></p>
+
+<p style="text-align: justify;">Виявляється, що на сприйняття рекомендацій досить часто впливає не лише якість ранжування результатів. Також дуже важливими є інші фактори: різноманітність, несподіваність, новизна та багато інших. Тож при розробці рекомендаційної системи необхідно обов’язково мати на увазі ці фактори.</p>
+
+<p style="text-align: center;"><strong>Висновки</strong></p>
+
+<p style="text-align: justify;">Рекомендаційні системи широко використовуються в мережі Інтернет для різних цілей: збільшення часу перебуття на сайті користувачами, різноманітність вибору тощо. Все це веде до збільшення прибутків підприємства, яке використовує рекомендаційну систему. Зараз існує величезна купа алгоритмів, які дозволяють покращити якість рекомендацій. Але це проблема прогнозування, тому однозначної відповіді який алгоритм краще працює немає. Тому є сенс експерементувати з різними параметрами рекомендацій, типами алгоритмів, тестувати їх роботу на користувачах. Саме таким шляхом можна досягти найкращих результатів.</p>
+
+<p style="text-align: justify;">В результаті аналізу алгоритмів для рекомендації непогані результати показав алгоритм SVD, оскільки це гібридний алгоритм, який базується на основних підходах до розробки рекомендаційних систем: колаборативній фільтрації та content-based алгоритмах. Тому він має менше недоліків, ніж ці алгоритми взяті окремо. Основною проблемою, звичайно, є проблема холодного старту, оскільки не можна навчити нейронну мережу коректно передбачувати оцінки не маючи тестової вибірки. Але в цілому це непоганий алгоритм.</p>
+
+<p style="text-align: center;"><strong style="line-height: 1.6em;">Література:</strong></p>
+
+<p style="text-align: justify;">1. Melville P.,Mooney R., Nagarajan R. (2002). Content-Boosted Collaborative Filtering for Improved Recommendations. Austin, TX, USA: University of Texas, USA. p1-6.</p>
+
+<p style="text-align: justify;">2. Linden G., Smith B., and York J. (2003). Item-to-Item Collaborative Filtering. Los Alamitos, CA, USA: IEEE Internet Computing. p76-80.</p>
+
+<p style="text-align: justify;">3. Sarwar B., Karypis G., Konstan J., and Riedl J. (2001). WWW10 Conference Materials / Item-Based Collaborative Filtering Recommendation Algorithms. Hong Kong: WWW10. p285-289.</p>
+
+<p style="text-align: justify;">4. William H. Press, Saul A. Teukolsky, William T. Vetterling, Brian P. Flannery (1992). Numerical Recipes in C / Singular Value Decomposition. 2nd ed. New York: Cambridge University Press. p59-71.</p>
+
+<p style="text-align: justify;">5. Рекомендательные системы: Часть 1. Введение в подходы и алгоритмы [Електронний ресурс]. – Режим доступу: https://www.ibm.com/developerworks/ru/library/os-recommender1/</p>

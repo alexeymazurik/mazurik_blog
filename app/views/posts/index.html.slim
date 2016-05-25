@@ -1,33 +1,19 @@
-- if notice
-  p.alert.alert-warning
-    = notice
-
-h1
-  | Posts &nbsp;
-  = link_to 'New Post', new_post_path, class: 'btn btn-sm btn-default'
-- unless @posts.empty?
-  table.table
-    thead
-      tr
-        th Title
-        th Annotation
-        th Section
-        th
-    tbody
-      - @posts.each do |post|
-        tr
-          td
-            = link_to post.title, post
-          td
-            = post.annotation
-          td
-            = post.section.name
-          td
-            .text-right
-              - if (current_user.id == post.user_id)
-                = link_to 'Edit', edit_post_path(post), class: 'btn btn-sm  btn-warning'
-                | &nbsp;
-                = link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger'
-- else
+- @posts.each do |post|
+  h3
+    = post.section.name
+    | &nbsp
+    | &#8594;
+    | &nbsp
+    = link_to post do
+      = post.title
+    | &nbsp;
   p
-    |  No posts yet. 
+    - post.tags.each do |tag|
+      span.label.label-default
+        = tag.name
+  - if post.image_src.present?
+    img src="#{post.image_src}" alt="Post image" width="100%"
+  p
+    = post.annotation
+  = link_to 'Learn more &#8594;'.html_safe, post, class: 'btn btn-default'
+  hr
