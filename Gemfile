@@ -21,7 +21,7 @@ gem 'coffee-rails'
 
 # Utilities
 gem 'puma', '~>3.1.0'
-gem 'web-console'
+gem 'web-console', group: :development
 gem 'simple_form'
 gem 'devise'
 gem 'nokogiri'
