@@ -58,13 +58,6 @@ namespace :deploy do
     end
   end
 
-  desc "Reload the database with seed data"
-  task :seed do
-    on roles(:app) do
-      execute "cd #{current_path}; bundle exec rake db:seed RAILS_ENV=production"
-    end
-  end
-
   desc 'Initial Deploy'
   task :initial do
     on roles(:app) do
@@ -83,7 +76,6 @@ namespace :deploy do
   before :starting,     :check_revision
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
-  after  :finishing,    :seed
   after  :finishing,    :restart
 end
 
