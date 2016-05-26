@@ -15,5 +15,5 @@ test:
 
 production:
   <<: *default
-  database: postgres
+  database: mazurik_blog_production
   password: <%= ENV['DATABASE_PASSWORD'] %>
