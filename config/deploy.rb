@@ -60,7 +60,7 @@ namespace :deploy do
 
   desc "Reload the database with seed data"
   task :seed do
-    run "cd #{shared_path}; bundle exec rake db:seed RAILS_ENV=production"
+    execute "cd #{shared_path}; bundle exec rake db:seed RAILS_ENV=production"
   end
 
   desc 'Initial Deploy'
