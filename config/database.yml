@@ -17,5 +17,3 @@ production:
   <<: *default
   database: postgres
   password: <%= ENV['DATABASE_PASSWORD'] %>
-  secret_key_base:
-  secret_key_base:

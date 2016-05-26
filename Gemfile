@@ -28,6 +28,7 @@ gem 'nokogiri'
 gem 'select2-rails'
 gem 'acts-as-taggable-on', '~> 3.4'
 gem 'ransack'
+gem 'dotenv'
 
 # Recommender system
 gem 'recommendable'
