@@ -81,7 +81,7 @@ namespace :deploy do
   before :starting,     :check_revision
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
-  after  :finishign,    :seed
+  after  :finishing,    :seed
   after  :finishing,    :restart
 end
 
