@@ -2,9 +2,9 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
-Rails.logger.warn "******************************************"
-Rails.logger.warn ENV
-Rails.logger.warn "******************************************"
+puts "******************************************"
+puts ENV
+puts "******************************************"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
