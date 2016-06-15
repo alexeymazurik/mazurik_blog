@@ -60,12 +60,13 @@ p
       .panel.panel-default
         .panel-body
           h3 You may also like:
-          - current_user.recommended_posts.each do |post|
+          - current_user.recommended_posts(4,0).each do |post|
             - if @post != post
               .media
-                .media-left
-                  = link_to post do
-                    img.media-object width="100" src="#{post.image_src}" alt='Post image'
+                - if @post.image_src
+                  .media-left
+                    = link_to post do
+                      img.media-object width="100" src="#{post.image_src}" alt='Post image'
                 .media-body
                   = link_to post do
                     h4.media-heading #{post.title}

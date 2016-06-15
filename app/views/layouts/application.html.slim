@@ -15,7 +15,7 @@ html
         - if current_user
           ul.navbar-nav.nav
             = active_link_to 'Articles', posts_path, 'posts'
-            = active_link_to 'Sections', sections_path, 'sections'
+            /= active_link_to 'Sections', sections_path, 'sections'
         - if current_user.present? && current_page?(controller: 'posts', action: 'index')
           = search_form_for @q, html: { class: 'navbar-form navbar-left' }  do |f|
             .form-group

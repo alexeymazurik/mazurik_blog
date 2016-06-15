@@ -1,10 +1,3 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
 require 'open-uri'
 
 SECTIONS = [
@@ -14,18 +7,69 @@ SECTIONS = [
     'Legal science'
 ]
 
-ARTICLE_URLS = %w(
-  http://www.inter-nauka.com/issues/2015/9/592/
-  http://www.inter-nauka.com/issues/2016/2/865/
-  http://www.inter-nauka.com/issues/2016/4/1089
-  http://www.inter-nauka.com/issues/2015/9/614
-)
+ARTICLE_URLS = [
+  # Technical Sciences
+  'http://www.inter-nauka.com/issues/2015/9/592',
+  'http://www.inter-nauka.com/issues/2016/4/1089',
+  'http://www.inter-nauka.com/issues/2015/9/614',
+  'http://www.inter-nauka.com/issues/2016/5/1221',
+  'http://www.inter-nauka.com/issues/2016/5/1129',
+  'http://www.inter-nauka.com/issues/2016/5/1100',
 
+  # Legal science
+  'http://www.inter-nauka.com/issues/2016/2/780',
+  'http://www.inter-nauka.com/issues/2016/2/778',
+  # Social media
+  'http://www.inter-nauka.com/issues/2016/2/865',
+  'http://www.inter-nauka.com/issues/2016/3/978',
+  # Economic sciences
+  'http://www.inter-nauka.com/issues/2016/5/1196',
+  'http://www.inter-nauka.com/issues/2016/5/1175',
+  'http://www.inter-nauka.com/issues/2016/5/1123',
+  'http://www.inter-nauka.com/issues/2016/4/1084'
+]
+
+# Admin
 user = User.create!(
     email: 'alexeymazurik@gmail.com',
     password: 'demodemo1234',
     password_confirmation: 'demodemo1234',
     admin: true
+)
+
+# Ivan
+User.create!(
+    email: 'ivan@example.com',
+    password: 'demodemo1234',
+    password_confirmation: 'demodemo1234'
+)
+
+# Dmitriy
+User.create!(
+    email: 'dmitriy@example.com',
+    password: 'demodemo1234',
+    password_confirmation: 'demodemo1234'
+)
+
+# Ihor
+User.create!(
+    email: 'ihor@example.com',
+    password: 'demodemo1234',
+    password_confirmation: 'demodemo1234'
+)
+
+# Aleksey
+User.create!(
+    email: 'aleksey@example.com',
+    password: 'demodemo1234',
+    password_confirmation: 'demodemo1234'
+)
+
+# Alexander
+User.create!(
+    email: 'alexander@example.com',
+    password: 'demodemo1234',
+    password_confirmation: 'demodemo1234'
 )
 
 SECTIONS.each do |section|
@@ -36,7 +80,7 @@ ARTICLE_URLS.each do |url|
   en_url = url.split('/').insert(3,'en').join('/')
 
   page = Nokogiri::HTML(open(en_url))
-  title = page.css('div[record] .page-header a').text
+  title = page.css('div[record] .page-header a').text.capitalize
   author = ''
   authors = page.css('div[record] .page-header + .row a')
   if authors.size == 1
@@ -58,6 +102,7 @@ ARTICLE_URLS.each do |url|
   page.search('p').each do |p|
     p.remove
     break if p.text.downcase.include?('key words:')
+    break if p.text.downcase.include?('keywords:')
   end
 
   article_text = page.children.to_html.strip

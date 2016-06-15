@@ -9,6 +9,7 @@ class PostsController < ApplicationController
   # GET /posts
   def index
     @q = Post.ransack(params[:q])
+    @q.sorts = 'section_id asc' if @q.sorts.empty?
     @posts = @q.result(distinct: true)
   end
 
