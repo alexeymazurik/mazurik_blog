@@ -12,3 +12,4 @@ public/assets
 node_modules
 bower_components
 db/schema.rb
+logfile
