@@ -167,6 +167,22 @@ GEM
       hooks (>= 0.2.1)
       redis (>= 2.2.0)
     redis (3.3.0)
+    redis-actionpack (5.0.1)
+      actionpack (>= 4.0, < 6)
+      redis-rack (>= 1, < 3)
+      redis-store (>= 1.1.0, < 1.4.0)
+    redis-activesupport (5.0.1)
+      activesupport (>= 3, < 6)
+      redis-store (~> 1.2.0)
+    redis-rack (1.6.0)
+      rack (~> 1.5)
+      redis-store (~> 1.2.0)
+    redis-rails (5.0.1)
+      redis-actionpack (~> 5.0.0)
+      redis-activesupport (~> 5.0.0)
+      redis-store (~> 1.2.0)
+    redis-store (1.2.0)
+      redis (>= 2.2)
     ref (2.0.0)
     responders (2.2.0)
       railties (>= 4.2.0, < 5.1)
@@ -272,7 +288,7 @@ DEPENDENCIES
   rails (= 4.2.6)
   ransack
   recommendable
-  redis
+  redis-rails
   rspec
   rubocop
   sass-rails
@@ -286,4 +302,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   1.11.2
+   1.14.6

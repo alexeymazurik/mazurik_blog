@@ -1,20 +1,19 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  username: postgres
+  password: postgres
+  host: postgres
   port: 5432
-  pool: 5
+  pool: 30
 
 development:
   <<: *default
   database: mazurik_blog_development
-  username: postgres
-  password: postgres
 
 test:
   <<: *default
   database: mazurik_blog_test
-  username: postgres
-  password: postgres
 
 production:
   adapter: postgresql
