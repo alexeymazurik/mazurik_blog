@@ -3,6 +3,7 @@
 !/log/.keep
 /tmp
 .idea
+.env
 *.swp
 .DS_Store
 .byebug_history
